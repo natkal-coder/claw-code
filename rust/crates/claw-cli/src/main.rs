@@ -3040,7 +3040,7 @@ impl runtime::PermissionPrompter for CliPermissionPrompter {
 
 struct DefaultRuntimeClient {
     runtime: tokio::runtime::Runtime,
-    client: ClawApiClient,
+    client: api::ProviderClient,
     model: String,
     enable_tools: bool,
     emit_output: bool,
@@ -3058,10 +3058,24 @@ impl DefaultRuntimeClient {
         tool_registry: GlobalToolRegistry,
         progress_reporter: Option<InternalPromptProgressReporter>,
     ) -> Result<Self, Box<dyn std::error::Error>> {
+        let resolved_model = api::resolve_model_alias(&model);
+        let provider_kind = api::detect_provider_kind(&resolved_model);
+
+        let client = match provider_kind {
+            api::ProviderKind::Ollama => {
+                // Ollama doesn't require auth
+                api::ProviderClient::from_model(&model)?
+            }
+            _ => {
+                // Other providers (ClawApi, OpenAI, Xai) need auth
+                let auth_source = resolve_cli_auth_source()?;
+                api::ProviderClient::from_model_with_default_auth(&model, Some(auth_source))?
+            }
+        };
+
         Ok(Self {
             runtime: tokio::runtime::Runtime::new()?,
-            client: ClawApiClient::from_auth(resolve_cli_auth_source()?)
-                .with_base_url(api::read_base_url()),
+            client,
             model,
             enable_tools,
             emit_output,

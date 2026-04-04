@@ -18,6 +18,9 @@ The Rust workspace is the current main product surface. The `claw` binary provid
 - Rust stable toolchain
 - Cargo
 - Provider credentials for the model you want to use
+  - For Anthropic: `ANTHROPIC_API_KEY`
+  - For Grok: `XAI_API_KEY`
+  - For local models: [Ollama](https://ollama.com) (no credentials needed)
 
 ### Authentication
 
@@ -36,6 +39,25 @@ export XAI_API_KEY="..."
 # Optional when using a compatible endpoint
 export XAI_BASE_URL="https://api.x.ai"
 ```
+
+Locally hosted models via Ollama (including Gemma 4):
+
+```bash
+# Install Ollama: https://ollama.com
+# Pull a model
+ollama pull gemma4
+
+# Set the Ollama endpoint
+export OLLAMA_BASE_URL="http://localhost:11434/v1"
+
+# Run claw with Gemma 4
+./target/release/claw --model gemma4
+```
+
+Supported Ollama models:
+- `gemma4` — [Google Gemma 4](https://huggingface.co/collections/google/gemma-4)
+- `gemma2` — Google Gemma 2
+- Any other Ollama model (use the exact model name)
 
 OAuth login is also available:
 

@@ -4,6 +4,11 @@ Forge is a local coding-agent CLI implemented in safe Rust. It is **Claude Code 
 
 The Rust workspace is the current main product surface. The `forge` binary provides interactive sessions, one-shot prompts, workspace-aware tools, local agent workflows, and plugin-capable operation from a single workspace.
 
+**Quick links:**
+- 🚀 [Full Setup Guide](../docs/SETUP.md) — Desktop server + ZeroTier clients
+- 📦 [Download Binaries](https://github.com/natkal-coder/claw-code/releases) — All platforms
+- 🛠️ Build script — `./scripts/build-release.sh`
+
 ## Current status
 
 - **Version:** `0.1.0`
@@ -94,74 +99,26 @@ Supported Ollama models:
 - `gemma2` — Google Gemma 2
 - Any other Ollama model (use the exact model name)
 
-### Network deployment (server/client)
+### Network deployment (server/client with ZeroTier)
 
-Run Gemma 4 on a desktop server, access from mobile/laptop clients over network or VPN.
+Run Gemma 4 on a desktop server, access from other devices over ZeroTier VPN.
 
-**Desktop (compute server):**
+**Quick summary:**
+- Desktop runs Ollama + Gemma 4, listens on ZeroTier network
+- Clients run Forge CLI, point to desktop ZeroTier IP
+- All compute on desktop; clients are thin
 
-1. Install [ZeroTier](https://www.zerotier.com) and join your VPN network:
-```bash
-curl -s https://install.zerotier.com/ | sudo bash
-sudo zerotier-cli join <YOUR_NETWORK_ID>
-```
-
-2. Get ZeroTier IP:
-```bash
-sudo zerotier-cli info
-# Look for the address like "192.168.193.xxx"
-```
-
-3. Make Ollama listen on all interfaces:
-```bash
-OLLAMA_HOST=0.0.0.0:11434 ollama serve
-```
-
-4. Make Gemma 4 default in `~/.bashrc`:
-```bash
-export OLLAMA_BASE_URL=http://localhost:11434/v1
-export FORGE_MODEL=gemma4
-```
-
-5. Reload and test:
-```bash
-source ~/.bashrc
-forge  # Will auto-use gemma4
-```
-
-**VPN Peers (mobile/laptop/remote):**
-
-1. Install ZeroTier and join the same network
-2. Get desktop ZeroTier IP:
-```bash
-# From desktop
-sudo zerotier-cli info
-# e.g., 192.168.193.42
-```
-
-3. Connect Forge to desktop:
-```bash
-export OLLAMA_BASE_URL=http://192.168.193.42:11434/v1
-forge --model gemma4
-```
-
-**Optional: Web UI for VPN peers:**
-
-Run [Open WebUI](https://docs.openwebui.com) on desktop for browser access:
-```bash
-docker run -d -p 3000:8080 \
-  -e OLLAMA_BASE_URL=http://localhost:11434 \
-  ghcr.io/open-webui/open-webui:latest
-```
-
-Then VPN peers access via: `http://192.168.193.42:3000`
-
-All compute happens on the desktop; VPN clients only run the Forge CLI or browser.
+**See [docs/SETUP.md](../docs/SETUP.md) for complete step-by-step instructions:**
+1. Desktop setup (Ollama, Gemma 4, ZeroTier)
+2. Client setup (all platforms)
+3. Network configuration
+4. Build and release process
+5. Troubleshooting
 
 OAuth login is also available:
 
 ```bash
-cargo run --bin claw -- login
+forge login
 ```
 
 ### Build from source (if you prefer)
@@ -169,6 +126,22 @@ cargo run --bin claw -- login
 **Prerequisites for building:**
 - Rust stable toolchain
 - Cargo
+
+**Build and release (developers):**
+
+Use the automated release script:
+```bash
+./scripts/build-release.sh 0.2.0
+```
+
+This:
+1. Compiles Forge for your platform
+2. Commits changes and creates git tag
+3. Pushes to GitHub
+4. GitHub Actions cross-compiles for all platforms (Linux, Windows, macOS Intel/ARM)
+5. Creates release with binaries
+
+Then get binaries from [GitHub Releases](https://github.com/natkal-coder/claw-code/releases)
 
 **Build locally:**
 ```bash

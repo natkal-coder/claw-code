@@ -61,44 +61,67 @@ Supported Ollama models:
 
 ### Network deployment (server/client)
 
-Run Gemma 4 on a desktop server, access from mobile/laptop clients over network.
+Run Gemma 4 on a desktop server, access from mobile/laptop clients over network or VPN.
 
 **Desktop (compute server):**
 
-1. Make Ollama listen on network interface:
+1. Install [ZeroTier](https://www.zerotier.com) and join your VPN network:
+```bash
+curl -s https://install.zerotier.com/ | sudo bash
+sudo zerotier-cli join <YOUR_NETWORK_ID>
+```
+
+2. Get ZeroTier IP:
+```bash
+sudo zerotier-cli info
+# Look for the address like "192.168.193.xxx"
+```
+
+3. Make Ollama listen on all interfaces:
 ```bash
 OLLAMA_HOST=0.0.0.0:11434 ollama serve
 ```
 
-2. Get desktop IP:
-```bash
-hostname -I
-# e.g., 192.168.1.100
-```
-
-3. Make Gemma 4 default in `~/.bashrc`:
+4. Make Gemma 4 default in `~/.bashrc`:
 ```bash
 export OLLAMA_BASE_URL=http://localhost:11434/v1
 export FORGE_MODEL=gemma4
 ```
 
-4. Reload and test:
+5. Reload and test:
 ```bash
 source ~/.bashrc
 forge  # Will auto-use gemma4
 ```
 
-**Mobile/Laptop (thin client):**
+**VPN Peers (mobile/laptop/remote):**
 
-Point to desktop IP:
+1. Install ZeroTier and join the same network
+2. Get desktop ZeroTier IP:
 ```bash
-export OLLAMA_BASE_URL=http://192.168.1.100:11434/v1
+# From desktop
+sudo zerotier-cli info
+# e.g., 192.168.193.42
+```
+
+3. Connect Forge to desktop:
+```bash
+export OLLAMA_BASE_URL=http://192.168.193.42:11434/v1
 forge --model gemma4
 ```
 
-(Replace `192.168.1.100` with your desktop's actual IP from `hostname -I`)
+**Optional: Web UI for VPN peers:**
 
-All compute happens on the desktop; edge devices only run the Forge CLI.
+Run [Open WebUI](https://docs.openwebui.com) on desktop for browser access:
+```bash
+docker run -d -p 3000:8080 \
+  -e OLLAMA_BASE_URL=http://localhost:11434 \
+  ghcr.io/open-webui/open-webui:latest
+```
+
+Then VPN peers access via: `http://192.168.193.42:3000`
+
+All compute happens on the desktop; VPN clients only run the Forge CLI or browser.
 
 OAuth login is also available:
 

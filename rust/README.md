@@ -13,10 +13,45 @@ The Rust workspace is the current main product surface. The `forge` binary provi
 
 ## Install, build, and run
 
+### Quick start (pre-built binaries)
+
+Download latest binaries for your platform from [GitHub Releases](https://github.com/natkal-coder/claw-code/releases):
+
+**Linux (x86_64):**
+```bash
+wget https://github.com/natkal-coder/claw-code/releases/download/latest/forge-linux-x86_64
+chmod +x forge-linux-x86_64
+./forge-linux-x86_64 --help
+```
+
+**macOS (Apple Silicon M1/M2/M3):**
+```bash
+wget https://github.com/natkal-coder/claw-code/releases/download/latest/forge-macos-arm64
+chmod +x forge-macos-arm64
+./forge-macos-arm64 --help
+```
+
+**macOS (Intel):**
+```bash
+wget https://github.com/natkal-coder/claw-code/releases/download/latest/forge-macos-x86_64
+chmod +x forge-macos-x86_64
+./forge-macos-x86_64 --help
+```
+
+**Windows (x86_64):**
+Download `forge-windows-x86_64.exe` from [Releases](https://github.com/natkal-coder/claw-code/releases)
+
+Then optionally install system-wide:
+```bash
+# Linux/macOS
+sudo cp forge-* /usr/local/bin/forge
+chmod +x /usr/local/bin/forge
+
+# Windows: Add exe to PATH or use directly
+```
+
 ### Prerequisites
 
-- Rust stable toolchain
-- Cargo
 - Provider credentials for the model you want to use
   - For Anthropic: `ANTHROPIC_API_KEY`
   - For Grok: `XAI_API_KEY`
@@ -129,18 +164,24 @@ OAuth login is also available:
 cargo run --bin claw -- login
 ```
 
-### Install locally
+### Build from source (if you prefer)
 
+**Prerequisites for building:**
+- Rust stable toolchain
+- Cargo
+
+**Build locally:**
 ```bash
-cargo install --path crates/claw-cli --locked
+git clone git@github.com:natkal-coder/claw-code.git
+cd claw-code/rust
+cargo build --release -p claw-cli
+# Binary at: target/release/forge
 ```
 
-This installs the `forge` binary to `~/.cargo/bin/forge`.
-
-### Build from source
-
+**Install from source:**
 ```bash
-cargo build --release -p claw-cli
+cargo install --path crates/claw-cli --locked
+# Installs to: ~/.cargo/bin/forge
 ```
 
 ### Run

@@ -59,6 +59,47 @@ Supported Ollama models:
 - `gemma2` — Google Gemma 2
 - Any other Ollama model (use the exact model name)
 
+### Network deployment (server/client)
+
+Run Gemma 4 on a desktop server, access from mobile/laptop clients over network.
+
+**Desktop (compute server):**
+
+1. Make Ollama listen on network interface:
+```bash
+OLLAMA_HOST=0.0.0.0:11434 ollama serve
+```
+
+2. Get desktop IP:
+```bash
+hostname -I
+# e.g., 192.168.1.100
+```
+
+3. Make Gemma 4 default in `~/.bashrc`:
+```bash
+export OLLAMA_BASE_URL=http://localhost:11434/v1
+export FORGE_MODEL=gemma4
+```
+
+4. Reload and test:
+```bash
+source ~/.bashrc
+forge  # Will auto-use gemma4
+```
+
+**Mobile/Laptop (thin client):**
+
+Point to desktop IP:
+```bash
+export OLLAMA_BASE_URL=http://192.168.1.100:11434/v1
+forge --model gemma4
+```
+
+(Replace `192.168.1.100` with your desktop's actual IP from `hostname -I`)
+
+All compute happens on the desktop; edge devices only run the Forge CLI.
+
 OAuth login is also available:
 
 ```bash

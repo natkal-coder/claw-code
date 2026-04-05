@@ -75,7 +75,7 @@ fn render_cli_error(problem: &str) -> String {
         };
         lines.push(format!("{label}{line}"));
     }
-    lines.push("  Help             claw --help".to_string());
+    lines.push("  Help             forge --help".to_string());
     lines.join("\n")
 }
 
@@ -1123,9 +1123,9 @@ impl LiveCli {
             format!(
                 "{} {}",
                 if color {
-                    "\x1b[1;38;5;45m🦞 Claw Code\x1b[0m"
+                    "\x1b[1;38;5;208m⚒ Forge\x1b[0m"
                 } else {
-                    "Claw Code"
+                    "Forge"
                 },
                 if color {
                     "\x1b[2m· ready\x1b[0m"
@@ -2487,7 +2487,7 @@ fn render_version_report() -> String {
     let git_sha = GIT_SHA.unwrap_or("unknown");
     let target = BUILD_TARGET.unwrap_or("unknown");
     format!(
-        "Claw Code\n  Version          {VERSION}\n  Git SHA          {git_sha}\n  Target           {target}\n  Build date       {DEFAULT_DATE}\n\nSupport\n  Help             claw --help\n  REPL             /help"
+        "Forge\n  Version          {VERSION}\n  Git SHA          {git_sha}\n  Target           {target}\n  Build date       {DEFAULT_DATE}\n\nSupport\n  Help             forge --help\n  REPL             /help"
     )
 }
 
@@ -3971,7 +3971,7 @@ fn convert_messages(messages: &[ConversationMessage]) -> Vec<InputMessage> {
 }
 
 fn print_help_to(out: &mut impl Write) -> io::Result<()> {
-    writeln!(out, "Claw Code CLI v{VERSION}")?;
+    writeln!(out, "Forge v{VERSION}")?;
     writeln!(
         out,
         "  Interactive coding assistant for the current workspace."
@@ -3980,19 +3980,19 @@ fn print_help_to(out: &mut impl Write) -> io::Result<()> {
     writeln!(out, "Quick start")?;
     writeln!(
         out,
-        "  claw                                  Start the interactive REPL"
+        "  forge                                  Start the interactive REPL"
     )?;
     writeln!(
         out,
-        "  claw \"summarize this repo\"            Run one prompt and exit"
+        "  forge \"summarize this repo\"            Run one prompt and exit"
     )?;
     writeln!(
         out,
-        "  claw prompt \"explain src/main.rs\"     Explicit one-shot prompt"
+        "  forge prompt \"explain src/main.rs\"     Explicit one-shot prompt"
     )?;
     writeln!(
         out,
-        "  claw --resume SESSION.json /status    Inspect a saved session"
+        "  forge --resume SESSION.json /status    Inspect a saved session"
     )?;
     writeln!(out)?;
     writeln!(out, "Interactive essentials")?;
@@ -4028,32 +4028,32 @@ fn print_help_to(out: &mut impl Write) -> io::Result<()> {
     writeln!(out, "Commands")?;
     writeln!(
         out,
-        "  claw dump-manifests                   Read upstream TS sources and print extracted counts"
+        "  forge dump-manifests                   Read upstream TS sources and print extracted counts"
     )?;
     writeln!(
         out,
-        "  claw bootstrap-plan                   Print the bootstrap phase skeleton"
+        "  forge bootstrap-plan                   Print the bootstrap phase skeleton"
     )?;
     writeln!(
         out,
-        "  claw agents                           List configured agents"
+        "  forge agents                           List configured agents"
     )?;
     writeln!(
         out,
-        "  claw skills                           List installed skills"
+        "  forge skills                           List installed skills"
     )?;
-    writeln!(out, "  claw system-prompt [--cwd PATH] [--date YYYY-MM-DD]")?;
+    writeln!(out, "  forge system-prompt [--cwd PATH] [--date YYYY-MM-DD]")?;
     writeln!(
         out,
-        "  claw login                            Start the OAuth login flow"
-    )?;
-    writeln!(
-        out,
-        "  claw logout                           Clear saved OAuth credentials"
+        "  forge login                            Start the OAuth login flow"
     )?;
     writeln!(
         out,
-        "  claw init                             Scaffold CLAW.md + local files"
+        "  forge logout                           Clear saved OAuth credentials"
+    )?;
+    writeln!(
+        out,
+        "  forge init                             Scaffold Forge.md + local files"
     )?;
     writeln!(out)?;
     writeln!(out, "Flags")?;
@@ -4095,23 +4095,23 @@ fn print_help_to(out: &mut impl Write) -> io::Result<()> {
         .join(", ");
     writeln!(out, "Resume-safe commands: {resume_commands}")?;
     writeln!(out, "Examples")?;
-    writeln!(out, "  claw --model opus \"summarize this repo\"")?;
+    writeln!(out, "  forge --model opus \"summarize this repo\"")?;
     writeln!(
         out,
-        "  claw --output-format json prompt \"explain src/main.rs\""
+        "  forge --output-format json prompt \"explain src/main.rs\""
     )?;
     writeln!(
         out,
-        "  claw --allowedTools read,glob \"summarize Cargo.toml\""
+        "  forge --allowedTools read,glob \"summarize Cargo.toml\""
     )?;
     writeln!(
         out,
-        "  claw --resume session.json /status /diff /export notes.txt"
+        "  forge --resume session.json /status /diff /export notes.txt"
     )?;
-    writeln!(out, "  claw agents")?;
-    writeln!(out, "  claw /skills")?;
-    writeln!(out, "  claw login")?;
-    writeln!(out, "  claw init")?;
+    writeln!(out, "  forge agents")?;
+    writeln!(out, "  forge /skills")?;
+    writeln!(out, "  forge login")?;
+    writeln!(out, "  forge init")?;
     Ok(())
 }
 

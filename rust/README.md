@@ -1,8 +1,8 @@
-# Claw Code
+# Forge
 
-Claw Code is a local coding-agent CLI implemented in safe Rust. It is **Claude Code inspired** and developed as a **clean-room implementation**: it aims for a strong local agent experience, but it is **not** a direct port or copy of Claude Code.
+Forge is a local coding-agent CLI implemented in safe Rust. It is **Claude Code inspired** and developed as a **clean-room implementation**: it aims for a strong local agent experience, but it is **not** a direct port or copy of Claude Code.
 
-The Rust workspace is the current main product surface. The `claw` binary provides interactive sessions, one-shot prompts, workspace-aware tools, local agent workflows, and plugin-capable operation from a single workspace.
+The Rust workspace is the current main product surface. The `forge` binary provides interactive sessions, one-shot prompts, workspace-aware tools, local agent workflows, and plugin-capable operation from a single workspace.
 
 ## Current status
 
@@ -50,8 +50,8 @@ ollama pull gemma4
 # Set the Ollama endpoint
 export OLLAMA_BASE_URL="http://localhost:11434/v1"
 
-# Run claw with Gemma 4
-./target/release/claw --model gemma4
+# Run Forge with Gemma 4
+./target/release/forge --model gemma4
 ```
 
 Supported Ollama models:
@@ -71,6 +71,8 @@ cargo run --bin claw -- login
 cargo install --path crates/claw-cli --locked
 ```
 
+This installs the `forge` binary to `~/.cargo/bin/forge`.
+
 ### Build from source
 
 ```bash
@@ -82,17 +84,17 @@ cargo build --release -p claw-cli
 From the workspace:
 
 ```bash
-cargo run --bin claw -- --help
-cargo run --bin claw --
-cargo run --bin claw -- prompt "summarize this workspace"
-cargo run --bin claw -- --model sonnet "review the latest changes"
+cargo run --bin forge -- --help
+cargo run --bin forge --
+cargo run --bin forge -- prompt "summarize this workspace"
+cargo run --bin forge -- --model sonnet "review the latest changes"
 ```
 
 From the release build:
 
 ```bash
-./target/release/claw
-./target/release/claw prompt "explain crates/runtime"
+./target/release/forge
+./target/release/forge prompt "explain crates/runtime"
 ```
 
 ## Supported capabilities
